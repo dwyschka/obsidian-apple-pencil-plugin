@@ -1,0 +1,6 @@
+node_modules/
+coverage/
+main.js
+release/
+.DS_Store
+.claude/

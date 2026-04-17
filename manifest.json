@@ -1,0 +1,10 @@
+{
+  "id": "apple-pencil",
+  "name": "Apple Pencil",
+  "version": "1.0.0",
+  "minAppVersion": "1.11.4",
+  "description": "Full-page Apple Pencil integration — draw directly in notes, convert to markdown.",
+  "author": "jonthornton07",
+  "authorUrl": "https://github.com/jonthornton07",
+  "isDesktopOnly": false
+}
