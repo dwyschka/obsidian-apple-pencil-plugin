@@ -1,5 +1,7 @@
 # Apple Pencil for Obsidian
 
+[![CI](https://github.com/jonthornton07/obsidian-apple-pencil-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/jonthornton07/obsidian-apple-pencil-plugin/actions/workflows/ci.yml)
+
 Handwrite directly inside Obsidian on iPad, then convert your handwriting to Markdown without leaving the note you are working on.
 
 > Built for people who want Apple Pencil capture inside their Obsidian workflow, not in a separate notes app.
