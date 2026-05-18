@@ -26,6 +26,7 @@ export class PencilSettingTab extends PluginSettingTab {
           .addOption("openai", "OpenAI GPT-4o Vision — excellent handwriting accuracy")
           .addOption("google", "Google Cloud Vision — fast, accurate")
           .addOption("gemini", "Google Gemini — excellent handwriting accuracy")
+          .addOption("openai-compatible", "OpenAI-compatible API — Ollama, LM Studio, mlx-omni-server, …")
           .setValue(this.plugin.settings.ocrProvider)
           .onChange(async (val) => {
             this.plugin.settings.ocrProvider = val as OCRProvider;
@@ -51,6 +52,46 @@ export class PencilSettingTab extends PluginSettingTab {
             .setValue(this.plugin.settings[keyConfig!.settingKey])
             .onChange(async (val) => {
               this.plugin.settings[keyConfig!.settingKey] = val;
+              await this.plugin.saveSettings();
+            })
+        );
+    }
+
+    if (this.plugin.settings.ocrProvider === "openai-compatible") {
+      new Setting(containerEl)
+        .setName("Base URL")
+        .setDesc("Base URL of the OpenAI-compatible server (e.g. http://localhost:11434 for Ollama, http://localhost:1234 for LM Studio).")
+        .addText((text) =>
+          text
+            .setPlaceholder("http://localhost:11434")
+            .setValue(this.plugin.settings.openaiCompatibleBaseUrl)
+            .onChange(async (val) => {
+              this.plugin.settings.openaiCompatibleBaseUrl = val;
+              await this.plugin.saveSettings();
+            })
+        );
+
+      new Setting(containerEl)
+        .setName("Model")
+        .setDesc("Vision-capable model to use, e.g. llava, llama3.2-vision, mlx-community/llama-3.2-11b-vision-instruct-4bit.")
+        .addText((text) =>
+          text
+            .setPlaceholder("llava")
+            .setValue(this.plugin.settings.openaiCompatibleModel)
+            .onChange(async (val) => {
+              this.plugin.settings.openaiCompatibleModel = val;
+              await this.plugin.saveSettings();
+            })
+        );
+
+      new Setting(containerEl)
+        .setName("API key (optional)")
+        .setDesc("Leave empty if the server requires no authentication.")
+        .addComponent((el) =>
+          new SecretComponent(this.app, el)
+            .setValue(this.plugin.settings.openaiCompatibleApiKey)
+            .onChange(async (val) => {
+              this.plugin.settings.openaiCompatibleApiKey = val;
               await this.plugin.saveSettings();
             })
         );

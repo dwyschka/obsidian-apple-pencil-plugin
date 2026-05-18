@@ -320,6 +320,11 @@ export class PencilCanvasView extends ItemView {
       google: this.settings.googleSecretId ? (s.getSecret(this.settings.googleSecretId) ?? "") : "",
       claude: this.settings.claudeSecretId ? (s.getSecret(this.settings.claudeSecretId) ?? "") : "",
       gemini: this.settings.geminiSecretId ? (s.getSecret(this.settings.geminiSecretId) ?? "") : "",
+      openaiCompatible: {
+        baseUrl: this.settings.openaiCompatibleBaseUrl,
+        model: this.settings.openaiCompatibleModel,
+        apiKey: this.settings.openaiCompatibleApiKey || undefined,
+      },
     };
   }
 

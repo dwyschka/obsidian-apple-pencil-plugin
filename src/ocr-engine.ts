@@ -6,6 +6,7 @@ export interface OCRKeys {
   google?: string;
   claude?: string;
   gemini?: string;
+  openaiCompatible?: { baseUrl: string; model: string; apiKey?: string };
 }
 
 export class OCREngine {
@@ -28,6 +29,8 @@ export class OCREngine {
         return this.recognizeWithClaude(imageDataUrl, keys.claude ?? "");
       case "gemini":
         return this.recognizeWithGemini(imageDataUrl, keys.gemini ?? "");
+      case "openai-compatible":
+        return this.recognizeWithOpenAICompatible(imageDataUrl, keys.openaiCompatible ?? { baseUrl: "", model: "" });
     }
   }
 
@@ -224,6 +227,43 @@ export class OCREngine {
       "Gemini API error"
     );
     return json.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? "";
+  }
+
+  private async recognizeWithOpenAICompatible(
+    imageDataUrl: string,
+    opts: { baseUrl: string; model: string; apiKey?: string }
+  ): Promise<string> {
+    if (!opts.baseUrl) throw new Error("Base URL not configured.");
+    if (!opts.model) throw new Error("Model not configured.");
+
+    const headers: Record<string, string> = {};
+    if (opts.apiKey) headers["Authorization"] = `Bearer ${opts.apiKey}`;
+
+    const json = await this.postJson(
+      `${opts.baseUrl.replace(/\/$/, "")}/v1/chat/completions`,
+      {
+        model: opts.model,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "image_url",
+                image_url: { url: imageDataUrl },
+              },
+              {
+                type: "text",
+                text: "Transcribe the handwritten text in this image exactly as written. Return only the transcribed text, no commentary. Preserve paragraph breaks.",
+              },
+            ],
+          },
+        ],
+        max_tokens: 2000,
+      },
+      headers,
+      "OpenAI-compatible API error"
+    );
+    return json.choices[0].message.content.trim();
   }
 
   setProvider(provider: OCRProvider) {

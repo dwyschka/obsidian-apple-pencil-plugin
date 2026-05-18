@@ -21,7 +21,7 @@ export interface Stroke {
 
 export type DrawingTool = "pen" | "highlighter" | "eraser" | "text";
 
-export type OCRProvider = "tesseract" | "openai" | "google" | "claude" | "gemini";
+export type OCRProvider = "tesseract" | "openai" | "google" | "claude" | "gemini" | "openai-compatible";
 
 export interface StrikethroughRegion {
   x1: number;
@@ -53,6 +53,10 @@ export interface PencilPluginSettings {
   googleSecretId: string;
   claudeSecretId: string;
   geminiSecretId: string;
+  // OpenAI-compatible local/custom provider
+  openaiCompatibleBaseUrl: string;
+  openaiCompatibleModel: string;
+  openaiCompatibleApiKey: string;
   defaultPenColor: string;
   defaultPenWidth: number;
   insertionMode: "append" | "cursor" | "newline";
@@ -65,6 +69,9 @@ export const DEFAULT_SETTINGS: PencilPluginSettings = {
   googleSecretId: "",
   claudeSecretId: "",
   geminiSecretId: "",
+  openaiCompatibleBaseUrl: "http://localhost:11434",
+  openaiCompatibleModel: "llava",
+  openaiCompatibleApiKey: "",
   defaultPenColor: "#000000",
   defaultPenWidth: 2,
   insertionMode: "newline",
