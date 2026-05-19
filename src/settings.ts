@@ -123,6 +123,20 @@ export class PencilSettingTab extends PluginSettingTab {
           })
       );
 
+    new Setting(containerEl)
+      .setName("Palm rejection threshold")
+      .setDesc("Maximum contact size (in CSS pixels) that counts as a finger. Increase if your finger is incorrectly rejected; decrease if palm touches slip through. Default: 120.")
+      .addSlider((slider) =>
+        slider
+          .setLimits(40, 300, 10)
+          .setValue(this.plugin.settings.palmRejectionThreshold)
+          .setDynamicTooltip()
+          .onChange(async (val) => {
+            this.plugin.settings.palmRejectionThreshold = val;
+            await this.plugin.saveSettings();
+          })
+      );
+
     new Setting(containerEl).setName("Text insertion").setHeading();
 
     new Setting(containerEl)

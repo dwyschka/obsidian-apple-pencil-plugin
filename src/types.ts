@@ -61,6 +61,7 @@ export interface PencilPluginSettings {
   defaultPenWidth: number;
   insertionMode: "append" | "cursor" | "newline";
   autosaveOnExit: boolean;
+  palmRejectionThreshold: number;
 }
 
 export const DEFAULT_SETTINGS: PencilPluginSettings = {
@@ -76,4 +77,5 @@ export const DEFAULT_SETTINGS: PencilPluginSettings = {
   defaultPenWidth: 2,
   insertionMode: "newline",
   autosaveOnExit: true,
+  palmRejectionThreshold: 120,
 };

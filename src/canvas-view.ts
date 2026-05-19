@@ -191,6 +191,7 @@ export class PencilCanvasView extends ItemView {
     this.canvas.style.height = cssHeight + "px";
 
     this.engine = new StrokeEngine(this.canvas);
+    this.engine.setPalmRejectionThreshold(this.settings.palmRejectionThreshold);
     // Use theme-aware default color unless user has customized it
     const isDark = document.body.classList.contains("theme-dark");
     const defaultColor = this.settings.defaultPenColor === "#000000" && isDark

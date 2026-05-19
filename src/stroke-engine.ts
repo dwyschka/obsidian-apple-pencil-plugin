@@ -15,6 +15,7 @@ export class StrokeEngine {
   private onChangeCallback: (() => void) | null = null;
   private textMeta: RenderedTextMeta | null = null;
   private isDarkTheme = false;
+  private palmRejectionThreshold = 120;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -22,6 +23,10 @@ export class StrokeEngine {
     this.ctx = canvas.getContext("2d")!;
     this.setupContext();
     this.bindEvents();
+  }
+
+  setPalmRejectionThreshold(threshold: number) {
+    this.palmRejectionThreshold = threshold;
   }
 
   private setupContext() {
@@ -41,9 +46,9 @@ export class StrokeEngine {
   private onPointerDown = (e: PointerEvent) => {
     // Finger = temporary eraser, ignore palms
     if (e.pointerType === "touch") {
-      if (e.width > 120 || e.height > 120) return;
+      if (e.width > this.palmRejectionThreshold || e.height > this.palmRejectionThreshold) return;
       e.preventDefault();
-      this.canvas.setPointerCapture(e.pointerId);
+      try { this.canvas.setPointerCapture(e.pointerId); } catch { /* element not ready */ }
       this.isFingerErasing = true;
       this.previousTool = this.tool;
       this.tool = "eraser";
@@ -57,7 +62,7 @@ export class StrokeEngine {
       this.tool = this.previousTool;
     }
     e.preventDefault();
-    this.canvas.setPointerCapture(e.pointerId);
+    try { this.canvas.setPointerCapture(e.pointerId); } catch { /* element not ready */ }
     this.isDrawing = true;
     this.startStroke(e);
   };
@@ -90,7 +95,7 @@ export class StrokeEngine {
 
   private onPointerMove = (e: PointerEvent) => {
     if (this.isFingerErasing && e.pointerType === "touch") {
-      if (e.width > 120 || e.height > 120) return;
+      if (e.width > this.palmRejectionThreshold || e.height > this.palmRejectionThreshold) return;
       e.preventDefault();
       if (this.currentStroke) {
         const pt = this.getPoint(e);
