@@ -1,6 +1,6 @@
 {
   "name": "obsidian-apple-pencil",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Full-page Apple Pencil integration for Obsidian",
   "main": "main.js",
   "scripts": {
